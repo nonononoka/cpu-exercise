@@ -4,9 +4,16 @@ short array[ 4096 ];
 
 void sort( int size )
 {
-	int i;
-	for( i = 0; i < size; i++ ){
-	}
+	for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (array[j] > array[j + 1]) {
+                // 隣接する要素の入れ替え
+                int temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
+            }
+        }
+    }
 }
 
 int main( int argc, char* argv[] )

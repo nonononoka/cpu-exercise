@@ -39,7 +39,7 @@ module H3_Simulator;
 
 		//シミュレーション開始
 		
-		adderInA = 1;	// A に 1 代入
+		adderInA = -2;	// A に 1 代入
 		adderInB = 8;	// B に 8 代入
 
 		#40 			// 40ns 経過させる（40 * 1timescale）

@@ -1,14 +1,12 @@
-:: ESetEnv.bat ‚ð“K“–‚È–¼‘O‚ÅƒRƒs[‚µ‚ÄC“à—e‚ð•ÒW‚ÌãCŽÀs‚µ‚Ä‰º‚³‚¢D
-:: EPC ‚ðˆê“xÄ‹N“®‚·‚é‚Ü‚ÅŠÂ‹«•Ï”‚Ì•ÏX‚ª”½‰f‚³‚ê‚È‚¢ê‡‚ª‚ ‚è‚Ü‚·D
-::   Cygwin ‚Ì•s‹ï‡H
+:: ï¿½ESetEnv.bat ï¿½ï¿½Kï¿½ï¿½ï¿½È–ï¿½ï¿½Oï¿½ÅƒRï¿½sï¿½[ï¿½ï¿½ï¿½ÄCï¿½ï¿½ï¿½eï¿½ï¿½ÒWï¿½Ìï¿½Cï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ä‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½D
+:: ï¿½EPC ï¿½ï¿½ï¿½ï¿½xï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ÅŠÂ‹ï¿½ï¿½Ïï¿½ï¿½Ì•ÏXï¿½ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½D
+::   Cygwin ï¿½Ì•sï¿½ï‡ï¿½H
 
 
 
-:: ModelSim ‚ð“±“ü‚µ‚½ƒpƒX‚ðÝ’è‚µ‚Ä‰º‚³‚¢D
-setx H3_MODELSIM_PATH C:/dev/
+:: ModelSim ï¿½ð“±“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Xï¿½ï¿½Ý’è‚µï¿½Ä‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½D
+setx H3_MODELSIM_PATH C:/home/nonoka/ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
 
-:: cygwin ‚ð“±“ü‚µ‚½ƒpƒX‚ðÝ’è‚µ‚Ä‰º‚³‚¢D
-setx H3_CYGWIN_PATH C:/tools/cygwin
-
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libXext.so.6:$LD_LIBRARY_PATH
 
 pause

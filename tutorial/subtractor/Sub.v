@@ -7,8 +7,15 @@
 `include "Types.v" 
 
 
-module Subtractor();      
+module Subtractor(
+    output
+        `DataPath dst,
+    
+    input
+        `DataPath srcA,
+        `DataPath srcB
+);      
 
-
+    assign dst = srcA - srcB;
 endmodule
 
