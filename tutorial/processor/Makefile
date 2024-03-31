@@ -1,9 +1,8 @@
-H3_CYGWIN_MODELSIM_PATH = $(shell cygpath -u "$$H3_MODELSIM_PATH")
-
-VLOG = $(H3_CYGWIN_MODELSIM_PATH)/vlog.exe
-VLIB = $(H3_CYGWIN_MODELSIM_PATH)/vlib.exe
-VSIM = $(H3_CYGWIN_MODELSIM_PATH)/vsim.exe -c
-MODELSIM = $(H3_CYGWIN_MODELSIM_PATH)/modelsim.exe
+H3_CYGWIN_MODELSIM_PATH = /home/nonoka/intelFPGA/20.1/modelsim_ase/bin
+VLOG = $(H3_CYGWIN_MODELSIM_PATH)/vlog
+VLIB = $(H3_CYGWIN_MODELSIM_PATH)/vlib
+VSIM = $(H3_CYGWIN_MODELSIM_PATH)/vsim -c
+MODELSIM = $(H3_CYGWIN_MODELSIM_PATH)/qhsim
 
 PROJECT_WORK = ModelSim
 LIBRARY_WORK = $(PROJECT_WORK)/$(LIBRARY_NAME)
@@ -24,8 +23,6 @@ SOURCES = \
 	LEDDrv.v \
 	MainSim.v \
 
-
-
 DEPS = \
 	$(SOURCES) \
 
@@ -38,8 +35,6 @@ OPTIONS = \
 	-sv -nocovercells \
 	-work $(LIBRARY_WORK) \
 	#-incr \
-
-
 
 all: $(DEPS) $(LIBRARY_WORK)
 	$(VLOG) $(OPTIONS) $(SOURCES)
@@ -65,8 +60,6 @@ sim:
 # GUI simulation
 sim-gui: 
 	( cd $(PROJECT_WORK); $(MODELSIM) $(LIBRARY_NAME).$(TOPLEVEL_MODULE) ;  )
-
-
 
 
 #	( cd $(WORK); $(VLOG) $(OPTIONS) $(DEPS); )
