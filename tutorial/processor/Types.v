@@ -16,6 +16,10 @@
 `define SHAMT_POS   6	// 開始位置
 `define ShamtPath logic[ `SHAMT_WIDTH-1 : 0 ]
 
+`define CONSTAT_WIDTH 16	// 幅
+`define CONSTAT_POS   0		// 開始位置
+`define ConstantPath logic[ `CONSTAT_WIDTH-1 : 0 ]
+
 // 命令コード
 `define OP_CODE_R  0 // R形式
 `define OP_CODE_LW   35 //lw命令

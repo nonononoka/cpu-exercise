@@ -78,6 +78,4 @@ module RegisterFile(
 		r7
 	);
 
-
-
 endmodule
