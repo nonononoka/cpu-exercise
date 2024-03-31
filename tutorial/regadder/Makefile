@@ -8,17 +8,16 @@ MODELSIM = $(H3_CYGWIN_MODELSIM_PATH)/qhsim
 PROJECT_WORK = ModelSim
 LIBRARY_WORK = $(PROJECT_WORK)/$(LIBRARY_NAME)
 
-
 # Library name and top-level module to be simulated
 LIBRARY_NAME    = H3_Modules
-TOPLEVEL_MODULE = H3_Simulator 
+TOPLEVEL_MODULE = H3_RegAdderSim 
 
 # Specify source files
 SOURCES = \
-	RegFile.v \
-	RegFileSim.v \
-
-
+	/home/nonoka/cpu-exercise/tutorial/regfile/RegFile.v \
+	/home/nonoka/cpu-exercise/tutorial/adder/Adder.v \
+	RegAdder.v \
+	RegAdderSim.v \
 
 DEPS = \
 	$(SOURCES) \
@@ -65,5 +64,4 @@ sim-gui:
 
 
 #	( cd $(WORK); $(VLOG) $(OPTIONS) $(DEPS); )
-
 
