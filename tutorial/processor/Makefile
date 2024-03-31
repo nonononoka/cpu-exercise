@@ -22,6 +22,9 @@ SOURCES = \
 	IOCtrl.v \
 	LEDDrv.v \
 	MainSim.v \
+	Decoder.v \
+	ALU.v \
+	RegisterFile.v \
 
 DEPS = \
 	$(SOURCES) \

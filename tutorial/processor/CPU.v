@@ -16,7 +16,6 @@ module CPU(
 										// dataAddr で指定したアドレスから読んだ値が入力される．
 );
 	
-	
 
 endmodule
 
