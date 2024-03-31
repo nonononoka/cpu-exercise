@@ -76,7 +76,7 @@ module H3_RegAdderSim;
 		rfWrEnable = 1;	rfWrNum = 1;	rfWrData = 14;	// $1に14を代入
 		#CYCLE_TIME
 		
-		rfRdNumA   = 0;	rfRdNumB = 1;   		// $0と$1を読み出す
+		rfWrEnable = 0; rfRdNumA   = 0;	rfRdNumB = 1;   		// $0と$1を読み出す
 		#CYCLE_TIME
 
 		#(CYCLE_TIME*10)
@@ -112,7 +112,7 @@ module H3_RegAdderSim;
 		$write(
 			"    %s regAdderout[%d]\n",
 			(rfWrEnable) ? 
-				"Write" : 
+				"" : 
 				"Add",
 			regAdderOut
 		);

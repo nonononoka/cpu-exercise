@@ -5,9 +5,8 @@
 
 // 基本的な型を定義したファイルの読み込み
 `include "Types.v" 
-`include "/home/nonoka/cpu-exercise/tutorial/adder/Adder.v" 
-`include "/home/nonoka/cpu-exercise/tutorial/regfile/RegFile.v" 
-
+`include "/media/sf_nonoka_ubuntu_share/cpu-exercise/tutorial/adder/Adder.v" 
+`include "/media/sf_nonoka_ubuntu_share/cpu-exercise/tutorial/regfile/RegFile.v" 
 
 module RegAdder(
 	input logic clk,			// クロック

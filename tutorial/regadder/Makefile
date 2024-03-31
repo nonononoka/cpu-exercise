@@ -14,8 +14,6 @@ TOPLEVEL_MODULE = H3_RegAdderSim
 
 # Specify source files
 SOURCES = \
-	/home/nonoka/cpu-exercise/tutorial/regfile/RegFile.v \
-	/home/nonoka/cpu-exercise/tutorial/adder/Adder.v \
 	RegAdder.v \
 	RegAdderSim.v \
 
