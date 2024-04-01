@@ -9,7 +9,6 @@ module ALU(
 );
     always_comb begin
         case(code)
-
         `ALU_CODE_ADD:
             aluOut = aluInA + aluInB;
         `ALU_CODE_SUB:
@@ -21,8 +20,9 @@ module ALU(
 		`ALU_CODE_SLT: 
 			aluOut = aluInA < aluInB ? `TRUE : `FALSE;
         `ALU_CODE_NOR: 
-			aluOut = ~(aluInA | aluInB); 
+			aluOut = !(aluInA | aluInB); 
         endcase
+        $display ($stime,"alu", aluOut);
     end
 
 endmodule

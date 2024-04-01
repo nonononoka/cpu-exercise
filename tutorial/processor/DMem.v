@@ -28,7 +28,6 @@ module DMem(
 	logic        weLatch;
 
 	always_ff @( posedge clk or negedge rst) begin
-		
 		if( !rst ) begin
 			addrLatch <= `DATA_MEM_ADDR_WIDTH'h0;
 			dataLatch <= `DATA_WIDTH'h0;

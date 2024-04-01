@@ -18,9 +18,6 @@ module CPU(
 	`InsnAddrPath pcIn;			// 外部書き込みをする時のアドレス
 	logic pcWrEnable;
 
-	// IMem
-	`InsnPath imemInsnCode; // 命令コード
-
 	// Decoder
 	`OpPath dcOp;				// OP フィールド
 	`RegNumPath dcRS;			// RS フィールド
@@ -73,7 +70,14 @@ module CPU(
 		.memRead( dcMemRead ), // out
 		.memWrite( dcMemWrite ),	// out
 		.branch( dcBranch ),	// out
-		.insn( imemInsnCode ) // in
+		.insn( insn ) // in
+	);
+
+	ALU alu (
+		.aluOut( aluOut ), // out
+		.aluInA( aluInA ), // in
+		.aluInB( aluInB ), // in
+		.code( dcALUCode ) // in
 	);
 
 	RegisterFile regFile(
@@ -88,14 +92,6 @@ module CPU(
 		.wrData( rfWrData ), // in
 		.wrNum( rfWrNum ), // in
 		.regWrite( dcRegWrite ) // in
-	);
-
-	ALU alu (
-		.aluOut( aluOut ), // out
-
-		.aluInA( aluInA ), // in
-		.aluInB( aluInB ), // in
-		.code( dcALUCode ) // in
 	);
 
 	always_comb begin
@@ -116,6 +112,7 @@ module CPU(
 		insnAddr     = pcOut;
 		dataAddr = aluOut[ `DATA_ADDR_WIDTH - 1 : 0 ];
 		dataOut = rfRdDataT;	
+		$display(insn, "rfWrNum", dcRegDst ,dcRT, rfWrNum, dcMemToReg, aluOut, rfWrData);
 	end
 endmodule
 

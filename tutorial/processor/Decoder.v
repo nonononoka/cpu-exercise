@@ -19,8 +19,8 @@ module Decoder (
 );
     logic aluOp1;
     logic aluOp0;
-    always_comb begin
 
+    always_comb begin
         op    = insn[ `OP_POS +: `OP_WIDTH      ];
 		rs    = insn[ `RS_POS +: `REG_NUM_WIDTH ];
 		rt    = insn[ `RT_POS +: `REG_NUM_WIDTH ];
@@ -32,50 +32,51 @@ module Decoder (
         // create operator code(p260)
         case(op)
             `OP_CODE_R: begin
-                regDst = 1;
-                aluSrc = 0;
-                memToReg = 0;
-                regWrite = 1;
-                memRead = 0;
-                memWrite = 0;
-                branch = 0;
-                aluOp1 = 1; 
-                aluOp0 = 0;
+                regDst = `TRUE;
+                aluSrc = `FALSE;
+                memToReg = `FALSE;
+                regWrite =  `TRUE;
+                memRead = `FALSE;
+                memWrite = `FALSE;
+                branch = `FALSE;
+                aluOp1 =  `TRUE; 
+                aluOp0 = `FALSE;
             end
             `OP_CODE_LW: begin
-                regDst = 0;
-                aluSrc = 1;
-                memToReg = 1;
-                regWrite = 1;
-                memRead = 1;
-                memWrite = 0;
-                branch = 0;
-                aluOp1 = 0;
-                aluOp0 = 0;
+                regDst = `FALSE;
+                aluSrc =  `TRUE;
+                memToReg =  `TRUE;
+                regWrite =  `TRUE;
+                memRead =  `TRUE;
+                memWrite = `FALSE;
+                branch = `FALSE;
+                aluOp1 = `FALSE;
+                aluOp0 = `FALSE;
             end
             `OP_CODE_SW: begin 
-                regDst = 0;
-                aluSrc = 1;
-                memToReg = 0;
-                regWrite = 0;
-                memRead = 0;
-                memWrite = 1;
-                branch = 0;
-                aluOp1 = 0;
-                aluOp0 = 0;
+                regDst = `FALSE;
+                aluSrc =  `TRUE;
+                memToReg = `FALSE;
+                regWrite = `FALSE;
+                memRead = `FALSE;
+                memWrite =  `TRUE;
+                branch = `FALSE;
+                aluOp1 = `FALSE;
+                aluOp0 = `FALSE;
             end
             `OP_CODE_BEQ: begin
-                regDst = 0;
-                aluSrc = 0;
-                memToReg = 1;
-                regWrite = 0;
-                memRead = 0;
-                memWrite = 0;
-                branch = 1;
-                aluOp1 = 0;
-                aluOp0 = 1;
+                regDst = `FALSE;
+                aluSrc = `FALSE;
+                memToReg =  `TRUE;
+                regWrite = `FALSE;
+                memRead = `FALSE;
+                memWrite = `FALSE;
+                branch =  `TRUE;
+                aluOp1 = `FALSE;
+                aluOp0 =  `TRUE;
             end
         endcase
+        // $write("decoder",regDst,aluSrc,memToReg,regWrite,memRead,memWrite,branch,aluOp1,aluOp0);
 
         // create ALUCOde
         if(op == `OP_CODE_LW || op == `OP_CODE_SW)
@@ -91,6 +92,7 @@ module Decoder (
             `FUNCT_CODE_SLT: aluCode = `ALU_CODE_SLT;
             endcase
         end
+        // $write("aluCode",aluCode);
     end
 
 endmodule

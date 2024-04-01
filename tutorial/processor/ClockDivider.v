@@ -21,7 +21,6 @@ module ClockDivider(
 	logic clkRegX4;
 
 	always_ff @( posedge clkX4 or negedge rst ) begin
-		
 		if( !rst ) begin
 			clkRegX2 = 1'b0;
 		end

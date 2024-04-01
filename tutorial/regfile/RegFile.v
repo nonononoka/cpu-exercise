@@ -26,7 +26,6 @@ module RegisterFile(
 	// `DataPath の配列（サイズ：`REG_FILE_SIZE）
 	`DataPath strage[ `REG_FILE_SIZE ]; 
 
-
 	// 書き込みと，レジスタ・ファイルの実現
 	// クロックの立ち上がりによって書き込みが行われる と言う動作を書くことで，
 	// コンパイラはこれを順序回路だと解釈する．

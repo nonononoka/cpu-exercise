@@ -99,7 +99,6 @@ module H3_RegAdderSim;
 		  	cycle
 		);
 		
-		
 		$write(
 			"    %s WrNum[%d] WrData[%d]\n",
 			(rfWrEnable) ? 

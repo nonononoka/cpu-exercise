@@ -25,6 +25,7 @@ SOURCES = \
 	Decoder.v \
 	ALU.v \
 	RegisterFile.v \
+	PC.v \
 
 DEPS = \
 	$(SOURCES) \
@@ -54,7 +55,6 @@ lib: clean
 $(LIBRARY_WORK): Makefile
 	make clean
 
-
 # simulation
 # vsim LIBRARY -do "run -all"
 sim: 
@@ -62,7 +62,7 @@ sim:
 
 # GUI simulation
 sim-gui: 
-	( cd $(PROJECT_WORK); $(MODELSIM) $(LIBRARY_NAME).$(TOPLEVEL_MODULE) ;  )
+	( cd $(PROJECT_WORK); $(MODELSIM) $(LIBRARY_NAME).$(TOPLEVEL_MODULE) -do "do wave.do; run 50ns"; )
 
 
 #	( cd $(WORK); $(VLOG) $(OPTIONS) $(DEPS); )
