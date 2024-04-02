@@ -75,12 +75,35 @@ module Decoder (
                 aluOp1 = `FALSE;
                 aluOp0 =  `TRUE;
             end
+            `OP_CODE_ADDI: begin
+                regDst = `FALSE;
+                aluSrc = `TRUE;
+                memToReg =  `FALSE;
+                regWrite = `TRUE;
+                memRead = `FALSE;
+                memWrite = `FALSE;
+                branch =  `FALSE;
+                aluOp1 = `TRUE;
+                aluOp0 =  `FALSE;
+            end
+            `OP_CODE_ANDI: begin
+                regDst = `FALSE;
+                aluSrc = `TRUE;
+                memToReg =  `FALSE;
+                regWrite = `TRUE;
+                memRead = `FALSE;
+                memWrite = `FALSE;
+                branch =  `FALSE;
+                aluOp1 = `TRUE;
+                aluOp0 =  `FALSE;
+            end
         endcase
-        // $write("decoder",regDst,aluSrc,memToReg,regWrite,memRead,memWrite,branch,aluOp1,aluOp0);
 
         // create ALUCOde
-        if(op == `OP_CODE_LW || op == `OP_CODE_SW)
+        if(op == `OP_CODE_LW || op == `OP_CODE_SW || op == `OP_CODE_ADDI)
             aluCode = `ALU_CODE_ADD;
+        else if (op == `OP_CODE_ANDI)
+            aluCode = `ALU_CODE_AND;
         else if(op == `OP_CODE_BEQ)
             aluCode = `ALU_CODE_SUB;
         else begin
@@ -92,7 +115,6 @@ module Decoder (
             `FUNCT_CODE_SLT: aluCode = `ALU_CODE_SLT;
             endcase
         end
-        // $write("aluCode",aluCode);
     end
 
 endmodule

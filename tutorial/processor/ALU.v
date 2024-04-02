@@ -8,6 +8,7 @@ module ALU(
   input `ALUCodePath code
 );
     always_comb begin
+        // $display ($stime,"alubegin",aluInA,aluInB ,code);
         case(code)
         `ALU_CODE_ADD:
             aluOut = aluInA + aluInB;
@@ -22,7 +23,7 @@ module ALU(
         `ALU_CODE_NOR: 
 			aluOut = !(aluInA | aluInB); 
         endcase
-        $display ($stime,"alu", aluOut);
+        // $display ($stime,"alu",code, aluOut);
     end
 
 endmodule

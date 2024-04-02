@@ -25,6 +25,8 @@
 `define OP_CODE_LW   35 //lw命令
 `define OP_CODE_SW   43 //sw命令
 `define OP_CODE_BEQ  4 //beq命令
+`define OP_CODE_ADDI  8 //addi
+`define OP_CODE_ANDI  12 //andi
 
 //
 // ALU のコード
@@ -49,6 +51,13 @@
 `define RS_POS 21
 `define RT_POS 16
 `define RD_POS 11
+
+//
+// 分岐のコード
+// disp:16bit
+
+`define EXPAND_BR_DISPLACEMENT(disp) \
+	{ disp[ `INSN_ADDR_WIDTH - 2 - 1 : 0 ], 2'b00 }
 
 //
 // --- レジスタ・ファイル

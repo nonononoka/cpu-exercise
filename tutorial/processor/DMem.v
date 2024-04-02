@@ -38,12 +38,13 @@ module DMem(
 			dataLatch <= dataIn;
 			weLatch   <= wrEnable;
 		end
-		
 		if( weLatch )
 			mem[ addrLatch ] <= dataLatch;
 	end
 	
-	assign dataOut = mem[ addrLatch ];
+	always_comb begin
+		dataOut = mem[ addrLatch ];
+	end
 
 	// データの読み込み
 	integer i;

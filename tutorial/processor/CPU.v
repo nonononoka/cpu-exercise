@@ -94,9 +94,19 @@ module CPU(
 		.regWrite( dcRegWrite ) // in
 	);
 
+	BranchUnit branch(
+		.pcOut(pcIn),
+		.pcIn(pcOut),
+		.regRS(rfRdDataS),
+		.regRT(rfRdDataT),
+		.constant(insn[ `CONSTAT_POS +: `CONSTAT_WIDTH ])
+	);
+
 	always_comb begin
 		// regDst
 		rfWrNum = dcRegDst ? dcRD : dcRT;
+		// MemToReg
+		rfWrData = dcMemToReg ? dataIn : aluOut;
 
 		// aluSrc
 		aluInA = rfRdDataS;
@@ -105,14 +115,14 @@ module CPU(
 		// MemWrite
 		memWrite = dcMemWrite;
 
-		// MemToReg
-		rfWrData = dcMemToReg ? dataIn : aluOut;
+		// pcWrEnable
+		pcWrEnable = dcBranch & (rfRdDataS == rfRdDataT);
 
 		// outputの記述
 		insnAddr     = pcOut;
 		dataAddr = aluOut[ `DATA_ADDR_WIDTH - 1 : 0 ];
-		dataOut = rfRdDataT;	
-		$display(insn, "rfWrNum", dcRegDst ,dcRT, rfWrNum, dcMemToReg, aluOut, rfWrData);
+		dataOut = rfRdDataT;
 	end
+
 endmodule
 

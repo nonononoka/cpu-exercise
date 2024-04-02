@@ -30,8 +30,8 @@ module RegisterFile(
 	// 書き込みと，レジスタ・ファイルの実現
 	// クロックの立ち上がりによって書き込みが行われる と言う動作を書くことで，
 	// コンパイラはこれを順序回路だと解釈する．
+	// always_ff中の動作は全て同時並列
 	always_ff @( posedge clk ) begin
-		$display("regfile", wrData, wrNum, regWrite);
 		strage[0] <= 0;
 		if( regWrite ) begin			// 書き込み制御
 			strage[ wrNum ] <= wrData;	// 順序回路では，ノンブロッキング代入で
@@ -62,7 +62,7 @@ module RegisterFile(
 		r6 = strage[6];
 		r7 = strage[7];
 
-		$monitor(
+		$display(
 		$stime,
 		"\nr0(%d)\n r1(%d)\n r2(%d)\n r3(%d)\n r4(%d)\n r5(%d)\n r6(%d)\n r7(%d)\n", 	// printf と同様の書式設定
 		r0,
