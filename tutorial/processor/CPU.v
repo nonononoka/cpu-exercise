@@ -103,6 +103,7 @@ module CPU(
 	);
 
 	always_comb begin
+		$display("insn:%h",insn);
 		// regDst
 		rfWrNum = dcRegDst ? dcRD : dcRT;
 		// MemToReg
