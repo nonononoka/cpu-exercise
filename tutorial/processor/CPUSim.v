@@ -17,31 +17,33 @@
 //
 // レジスタ・ファイルの検証用のモジュール
 //
-module H3_RegAdderSim;
+module H3_CPUSim;
 
-	parameter CYCLE_TIME = 10; // 1サイクルを 10ns に設定
+	parameter CYCLE_TIME = 200; // 1サイクルを 10ns に設定
 
 	integer cycle;			// 測定用サイクル
 
 	logic clk;				// クロック
 
-	`RegNumPath rfRdNumA;	// 読み出しレジスタ番号A
-	`RegNumPath rfRdNumB;	// 読み出しレジスタ番号B
+    logic rst;
+	
+	`InsnPath insn;	// 読み出しデータA
+	`DataPath dataIn;
 
-	`DataPath   rfWrData;	// 書き込みデータ
-	`RegNumPath rfWrNum;	// 書き込みレジスタ番号
-	logic       rfWrEnable;	// 書き込み制御 1の場合，書き込みを行う
+    `InsnAddrPath insnAddr;		// 命令メモリへのアドレス出力
+	`DataAddrPath dataAddr;		// データバスへのアドレス出力
+	`DataPath     dataOut;		// 書き込みデータ出力 dataAddr で指定したアドレスに対して書き込む値を出力する．
+	logic         memWrite;
 
-    `DataPath regAdderOut;	
-
-	RegAdder regAdder(
+	CPU cpu(
 		.clk( clk ),
-		.rdNumA  ( rfRdNumA   ),
-		.rdNumB  ( rfRdNumB   ),
-		.wrData  ( rfWrData   ),
-		.wrNum   ( rfWrNum    ),
-		.wrEnable( rfWrEnable ),
-        .dst(regAdderOut)
+        .rst(rst),
+		.insnAddr ( insnAddr  ),
+		.dataAddr ( dataAddr ),
+		.dataOut  ( dataOut   ),
+		.memWrite  ( memWrite  ),
+		.insn  ( insn ),
+		.dataIn  ( dataIn  )
 	);
 
 	// クロック
@@ -60,25 +62,22 @@ module H3_RegAdderSim;
 	initial begin
 
 		// 初期化
-		rfRdNumA   = 0;
-		rfRdNumB   = 0;
-		rfWrData   = 0;
-		rfWrNum    = 0;
-		rfWrEnable = 0;
+		clk = 0;
+        rst = 1;
 
 		//
 		// シミュレーション開始
 		//
+        insn = 34; dataIn = 0;  //r5 = r0 + 1
+        #CYCLE_TIME
 		
-		rfWrEnable = 1;	rfWrNum = 0;	rfWrData = 15;  // $0に15を代入
-		#CYCLE_TIME
-		
-		rfWrEnable = 1;	rfWrNum = 1;	rfWrData = 14;	// $1に14を代入
-		#CYCLE_TIME
-		
-		rfWrEnable = 0; rfRdNumA   = 0;	rfRdNumB = 1;   		// $0と$1を読み出す
-		#CYCLE_TIME
+		insn = 537198593; dataIn = 0;  //r5 = r0 + 1
+        #CYCLE_TIME
 
+        insn = 537264130; dataIn = 0; //r6 = r0 + 2
+        #CYCLE_TIME
+
+        insn = 10893354; dataIn = 0; // r7 = r5 < r6
 		#(CYCLE_TIME*10)
 		$finish;
 		// 10サイクル経過して終了
@@ -100,23 +99,6 @@ module H3_RegAdderSim;
 		);
 		
 		$write(
-			"    %s WrNum[%d] WrData[%d]\n",
-			(rfWrEnable) ? 
-				"Write" : 
-				"     ",
-			rfWrNum,
-			rfWrData
-		);
-        
-		$write(
-			"    %s regAdderout[%d]\n",
-			(rfWrEnable) ? 
-				"" : 
-				"Add",
-			regAdderOut
-		);
-		
-		$write(
 			"  %s\n",
 		  	( clk == 1 ) ? "posedge clk" : "negedge clk"
 		);
@@ -124,4 +106,3 @@ module H3_RegAdderSim;
 	end
   
 endmodule
-

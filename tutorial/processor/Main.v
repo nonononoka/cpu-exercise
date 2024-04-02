@@ -41,66 +41,72 @@ module Main(
 
 	// Clock divider
 	ClockDivider clockDivider(
-		clk,
-		rst,
-		clkX4
+		.clk( clk ),
+		.rst( rst ),
+		.clkX4( clkX4 )
 	);
 	
 	// IO
 	IOCtrl ioCtrl(
-		clkX4,
-		clkled,
-		rst,
-		dmemWrEnable,
-		dataToCPU,
-		
-		led,	// LED
-		gate,	// select 7seg
-		lamp,	// Lamp?
+		.clk( clkX4 ), // in
+		.clkLed( clkled ), // in
+		.rst( rst ), // in
 
-		dataAddr,
-		dataFromCPU,
-		dataFromDMem,
-		dataWE_Req,
+		.dmemWrEnable( dmemWrEnable ), // out
+		.dataToCPU( dataToCPU ), // out
 
-		sigCH,
-		sigCE,
-		sigCP
+		.led( led ),	// out: LED
+		.gate( gate ),	// out: select 7seg
+		.lamp( lamp ),	// out: Lamp?
+
+		.addrFromCPU( dataAddr ), // in
+		.dataFromCPU( dataFromCPU ), // in
+		.dataFromDMem( dataFromDMem ), // in
+		.weFromCPU( dataWE_Req ), // in
+
+		.sigCH( sigCH ), // in
+		.sigCE( sigCE ), // in
+		.sigCP( sigCP ) // in
 	);
 	
 	// CPU
 	CPU cpu(
-		clk,
-		rst,
-		imemAddr,		// 命令メモリへのアドレス出力
-		dataAddr,		// データメモリへのアドレス出力
-		dataFromCPU,	// データメモリへの入力
-		dataWE_FromCPU,	// データメモリ書き込み有効
-		imemDataToCPU,	// 命令メモリからの出力
-		dataToCPU		// データメモリからの出力
+		.clk( clk ),
+		.rst( rst ),
+
+		.insnAddr( imemAddr ),		// out: 命令メモリへのアドレス出力
+		.dataAddr( dataAddr ),		// out: データメモリへのアドレス出力
+		.dataOut( dataFromCPU ),	// out: データメモリへの入力
+		.memWrite( dataWE_FromCPU ),	// out: データメモリ書き込み有効
+
+		.insn( imemDataToCPU ),	// in: 命令メモリからの出力
+		.dataIn( dataToCPU )	// in: データメモリからの出力
 	);
 
 	// IMem
-	IMem imem( 
-		clkX4, 			// メモリは4倍速
-		rst,
-		imemDataToCPU,
-		imemAddr
+	IMem imem(
+		.clk( clkX4 ), 			// in: メモリは4倍速
+		.rst( rst ), // in
+
+		.insn( imemDataToCPU ), // out
+		.addr( imemAddr ) // in
 	);
+
 
 	// Data memory
 	DMem dmem(
-		clkX4,			// メモリは4倍速
-		rst,			// リセット
-		dataFromDMem,
-		dataAddr,
-		dataFromCPU,
-		dmemWrEnable
+		.clk( clkX4 ),			// メモリは4倍速
+		.rst( rst ),			// リセット
+
+		.dataOut( dataFromDMem ), // out
+		.addr( dataAddr ), // in
+		.dataIn( dataFromCPU ), // in
+		.wrEnable( dmemWrEnable ) // in
 	);
 
 	// Connections & multiplexers
 	always_comb begin
-		
+
 		// クロック
 		clkX4  = clkBase;
 		

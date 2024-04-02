@@ -10,7 +10,7 @@ LIBRARY_WORK = $(PROJECT_WORK)/$(LIBRARY_NAME)
 
 # Library name and top-level module to be simulated
 LIBRARY_NAME    = H3_Modules
-TOPLEVEL_MODULE = H3_MainSim 
+TOPLEVEL_MODULE = H3_MainSim
 
 # Specify source files
 SOURCES = \
@@ -22,6 +22,11 @@ SOURCES = \
 	IOCtrl.v \
 	LEDDrv.v \
 	MainSim.v \
+	Decoder.v \
+	ALU.v \
+	RegisterFile.v \
+	PC.v \
+	Branch.v \
 
 DEPS = \
 	$(SOURCES) \
@@ -51,7 +56,6 @@ lib: clean
 $(LIBRARY_WORK): Makefile
 	make clean
 
-
 # simulation
 # vsim LIBRARY -do "run -all"
 sim: 
@@ -59,7 +63,7 @@ sim:
 
 # GUI simulation
 sim-gui: 
-	( cd $(PROJECT_WORK); $(MODELSIM) $(LIBRARY_NAME).$(TOPLEVEL_MODULE) ;  )
+	( cd $(PROJECT_WORK); $(MODELSIM) $(LIBRARY_NAME).$(TOPLEVEL_MODULE) -do "do wave.do; "; )
 
 
 #	( cd $(WORK); $(VLOG) $(OPTIONS) $(DEPS); )

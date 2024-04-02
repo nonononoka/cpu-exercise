@@ -10,7 +10,7 @@ LIBRARY_WORK = $(PROJECT_WORK)/$(LIBRARY_NAME)
 
 # Library name and top-level module to be simulated
 LIBRARY_NAME    = H3_Modules
-TOPLEVEL_MODULE = H3_RegAdderSim 
+TOPLEVEL_MODULE = H3_RegAdderSim
 
 # Specify source files
 SOURCES = \

@@ -28,7 +28,6 @@ module DMem(
 	logic        weLatch;
 
 	always_ff @( posedge clk or negedge rst) begin
-		
 		if( !rst ) begin
 			addrLatch <= `DATA_MEM_ADDR_WIDTH'h0;
 			dataLatch <= `DATA_WIDTH'h0;
@@ -39,12 +38,13 @@ module DMem(
 			dataLatch <= dataIn;
 			weLatch   <= wrEnable;
 		end
-		
 		if( weLatch )
 			mem[ addrLatch ] <= dataLatch;
 	end
 	
-	assign dataOut = mem[ addrLatch ];
+	always_comb begin
+		dataOut = mem[ addrLatch ];
+	end
 
 	// データの読み込み
 	integer i;

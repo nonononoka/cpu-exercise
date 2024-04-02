@@ -5,14 +5,11 @@
 
 
 // 基本的な型を定義したファイルの読み込み
-`include "Types.v" 
-
-
+`include "Types.v"
 
 // シミュレーションの単位時間の設定
 // #~ と書いた場合，この時間が経過する．
 `timescale 1ns/1ns
-
 
 //
 // 全体の検証用モジュール
@@ -117,6 +114,26 @@ module H3_MainSim;
 		    	countCycle = 1;
 		    end
 	    end
+	end
+
+	always @( posedge clkX4 or negedge clkX4 ) begin 
+		
+		$write(
+			"%s\n",
+			( clkX4 == 0 ) ?
+		  		"=====================================================" :
+		  		"-----------------------------------------------------");
+		
+		$write(
+			"cycle -> %0d\n", 
+		  	cycleX4
+		);
+		
+		$write(
+			"  %s\n",
+		  	( clkX4 == 1 ) ? "posedge clk" : "negedge clk"
+		);
+		
 	end
 
 endmodule
