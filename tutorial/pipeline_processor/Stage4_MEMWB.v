@@ -40,6 +40,7 @@ always_ff @( posedge clk or negedge rst ) begin
       outRfWrNum <= inRfWrNum;
       outMData <= inMData;
     end
+    $display("MEMWB%h",outAluOut);
 end
 
 

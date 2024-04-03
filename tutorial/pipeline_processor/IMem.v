@@ -23,17 +23,20 @@ module IMem(
 	`InsnAddrPath addrLatch;
 
 	always_ff @( posedge clk or negedge rst ) begin
+		$display("addr:%h", addr);
 		if( !rst ) begin
 			addrLatch <= `INSN_ADDR_WIDTH'h0;
 		end
 		else begin
 			addrLatch <= addr;
 		end
+		$display($stime, rst, "addrLatch:%h", addrLatch);
 	end
 
 	always_comb begin
+		$display("addrLatch", addrLatch);
 		insn = mem[ addrLatch[ `INSN_MEM_OFFSET +: `INSN_MEM_WIDTH ] ];
-		// $display($stime, "insnaddr", addr);
+		$display($stime, "insn:%h", insn);
 	end
 
 	// 命令データの読み込み

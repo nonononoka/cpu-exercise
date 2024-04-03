@@ -30,7 +30,7 @@ module Main(
 	`DataAddrPath dataAddr;			// アドレス
 	`DataPath     dataFromCPU;		// 入力
 	`DataPath     dataFromDMem;		// データメモリ読み出し
-	// logic         dataWE_FromCPU;
+	logic         dataWE_FromCPU;
 	
 	// IO
 	IOCtrl ioCtrl(
@@ -63,7 +63,7 @@ module Main(
 		.insnAddr( imemAddr ),		// out: 命令メモリへのアドレス出力
 		.dataAddr( dataAddr ),		// out: データメモリへのアドレス出力
 		.dataOut( dataFromCPU ),	// out: データメモリへの入力
-		.memWrite( dmemWrEnable ),	// out: データメモリ書き込み有効
+		.memWrite(  dataWE_FromCPU  ),	// out: データメモリ書き込み有効
 
 		.insn( imemDataToCPU ),	// in: 命令メモリからの出力
 		.dataIn( dataToCPU )	// in: データメモリからの出力

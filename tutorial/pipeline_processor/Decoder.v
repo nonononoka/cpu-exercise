@@ -19,6 +19,7 @@ module Decoder (
     `FunctPath funct;
 
     always_comb begin
+        $display("decoder_insn:%h",insn);
         op    = insn[ `OP_POS +: `OP_WIDTH      ];
 		rs    = insn[ `RS_POS +: `REG_NUM_WIDTH ];
 		rt    = insn[ `RT_POS +: `REG_NUM_WIDTH ];
@@ -84,6 +85,7 @@ module Decoder (
                 branch =  `FALSE;
             end
         endcase
+        $display("decoder_insn:%h",insn,regDst, aluSrc, memToReg, regWrite, memRead, memWrite, branch);
 
         // create ALUCOde
         if(op == `OP_CODE_LW || op == `OP_CODE_SW || op == `OP_CODE_ADDI)

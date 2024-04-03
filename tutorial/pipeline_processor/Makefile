@@ -14,7 +14,6 @@ TOPLEVEL_MODULE = H3_MainSim
 
 # Specify source files
 SOURCES = \
-	ClockDivider.v \
 	CPU.v \
 	DMem.v \
 	IMem.v \
@@ -26,7 +25,6 @@ SOURCES = \
 	ALU.v \
 	RegisterFile.v \
 	PC.v \
-	Branch.v \
 	Stage1_IFID.v \
 	Stage2_IDEX.v \
 	Stage3_EXMEM.v \

@@ -9,9 +9,9 @@ module IDEX(
     input logic rst,
 
     // from IFID
-    input `InsnPath inIncrementedInsn,
+    input `InsnAddrPath inIncrementedInsn,
 
-    output `InsnPath outIncrementedInsn,
+    output `InsnAddrPath outIncrementedInsn,
 
     // control signal
     input logic inRegDst,
@@ -33,26 +33,26 @@ module IDEX(
     output `ALUCodePath outAluCode,
 
     // register file
-    `DataPath inRdDataS,
-    `DataPath inRdDataT,
+    input `DataPath inRdDataS,
+    input `DataPath inRdDataT,
 
-    `DataPath outRdDataS,
-    `DataPath outRdDataT,
+    output `DataPath outRdDataS,
+    output `DataPath outRdDataT,
 
     // RT,RD
-    `RegNumPath inDcRT,
-    `RegNumPath inDcRD,
+    input `RegNumPath inDcRT,
+    input `RegNumPath inDcRD,
 
-    `RegNumPath outDcRT,
-    `RegNumPath outDcRD,
+    output `RegNumPath outDcRT,
+    output `RegNumPath outDcRD,
 
     // for PC
-    `InsnAddrPath inDisp,
-    `InsnAddrPath outDisp,
+    input `InsnAddrPath inDisp,
+    output `InsnAddrPath outDisp,
 
     // constant for ALU
-    `ConstantPath inConstant,
-    `ConstantPath outConstant
+    input `ConstantPath inConstant,
+    output `ConstantPath outConstant
 );
 
 always_ff @( posedge clk or negedge rst ) begin
@@ -87,6 +87,7 @@ always_ff @( posedge clk or negedge rst ) begin
       outDcRD <= inDcRD;
       outConstant <= inConstant;
     end
+    $display("IDEX%h",outAluSrc);
   end
 
 endmodule

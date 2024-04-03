@@ -22,8 +22,8 @@ module EXMEM(
     output logic outBranch,
 
     // pcOUT
-    `InsnAddrPath inPcOut,
-    `InsnAddrPath outPcOut,
+    input `InsnAddrPath inPcOut,
+    output `InsnAddrPath outPcOut,
 
     // from ALU
     input logic inIsEqual,
@@ -33,8 +33,8 @@ module EXMEM(
     output `DataPath outAluOut,
 
     // from RT
-    input `RegNumPath inRT,
-    output `RegNumPath outRT,
+    input `DataPath inRfRdDataT,
+    output `DataPath outRfRdDataT,
 
     // write Register Num
     input `RegNumPath inRfWrNum,
@@ -51,7 +51,7 @@ always_ff @( posedge clk or negedge rst ) begin
       outPcOut <= `FALSE;
       outIsEqual <= `FALSE;
       outAluOut <= `FALSE;
-      outRT <= `FALSE;
+      outRfRdDataT <= `FALSE;
       outRfWrNum = `FALSE;
     end
 
@@ -64,9 +64,10 @@ always_ff @( posedge clk or negedge rst ) begin
       outPcOut <= inPcOut;
       outIsEqual <= inIsEqual;
       outAluOut <= inAluOut;
-      outRT <= inRT;
+      outRfRdDataT <= inRfRdDataT;
       outRfWrNum = inRfWrNum;
     end
+    $display("EXMEM%h",outAluOut);
 end
 
 endmodule

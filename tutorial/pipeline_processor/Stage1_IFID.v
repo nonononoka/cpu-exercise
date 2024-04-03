@@ -8,9 +8,9 @@ module IFID(
     input logic clk,
     input logic rst,
     input `InsnPath inInsn,
-    input `InsnPath inIncrementedInsn,
+    input `InsnAddrPath inIncrementedInsn,
     output `InsnPath outInsn,
-    output `InsnPath outIncrementedInsn
+    output `InsnAddrPath outIncrementedInsn
 );
  always_ff @( posedge clk or negedge rst ) begin
     if ( !rst ) begin
@@ -21,6 +21,7 @@ module IFID(
       outInsn <= inInsn;
       outIncrementedInsn <= inIncrementedInsn;
     end
+    $display("outInsn:IFIF%h",outInsn);
   end
 
 endmodule

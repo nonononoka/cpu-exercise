@@ -98,7 +98,6 @@ module CPU(
 	`DataPath aluOutToWB;
 	`RegNumPath rfWrNumToWB;		// 書き込み番号
 	`DataPath     dataInToWB;	
-	logic pcSrc;
 
 	// MEMWB
 	logic regWriteToID;
@@ -147,17 +146,9 @@ module CPU(
 		.rdNumB( dcRT ), // in
 
 		.wrData( rfWrData ), // in
-		.wrNum( rfWrNum ), // in
+		.wrNum( rfWrNumToWB ), // in
 		.regWrite( regWriteToID ) // in
 	);
-
-	// BranchUnit branch(
-	// 	.pcOut(pcIn),
-	// 	.pcIn(pcOut),
-	// 	.regRS(rfRdDataS),
-	// 	.regRT(rfRdDataT),
-	// 	.constant(insn[ `CONSTAT_POS +: `CONSTAT_WIDTH ])
-	// );
 
 	IFID ifid(
 		.clk(clk),
@@ -235,8 +226,8 @@ module CPU(
 		.outIsEqual(isEqualToMem),
 		.outAluOut(aluOutToMem),
 
-		.inRT(rfRdDataTToEX),
-		.outRT(rfRdDataTToMem),
+		.inRfRdDataT(rfRdDataTToEX),
+		.outRfRdDataT(rfRdDataTToMem),
 
 		.inRfWrNum(rfWrNum),
 		.outRfWrNum(rfWrNumToMem)
@@ -248,7 +239,7 @@ module CPU(
 		.inMemToReg(memToRegToMEM),
 		.inRegWrite(regWriteToMEM),
 		.outMemToReg(memToRegToWB),
-		.ourRegWrite(regWriteToWB),
+		.outRegWrite(regWriteToWB),
 		.inAluOut(aluOutToMem),
 		.outAluOut(aluOutToWB),
 		.inRfWrNum(rfWrNumToMem),
@@ -259,6 +250,7 @@ module CPU(
 
 	always_comb begin
 		// ID
+		insnAddr     = pcOut;
 		incrementedInsnAddr = pcOut + `INSN_PC_INC;
 
 		// EX
@@ -267,12 +259,13 @@ module CPU(
 		tmpPcOut = incrementedInsnAddrToEX + disp;
 		isEqual =  (rfRdDataSToEX == rfRdDataTToEX) ? `TRUE : `FALSE;
 		aluInA = rfRdDataSToEX;
-		aluInB = aLUSrcToEX ? constantToEX: rfRdDataSToEX;
+		aluInB = aLUSrcToEX ? constantToEX: rfRdDataTToEX;
 		rfWrNum = regDstToEX ? dcRDToEX : dcRTToEX;
 
 		// MEM
 		isEqual = rfRdDataSToEX == rfRdDataSToEX;
-		pcSrc = branchToMEM & isEqualToMem;
+		pcWrEnable = branchToMEM & isEqualToMem;
+		pcIn = tmpPcOutToMem;
 		memWrite = memWriteToMEM;
 		dataAddr = aluOutToMem;
 		dataOut = rfRdDataTToMem;
@@ -280,7 +273,7 @@ module CPU(
 		// WB
 		regWriteToID = regWriteToWB;
 		rfWrData = memToRegToWB ? dataIn : aluOutToWB;
-
+		$display("insnToID",insnToID);
 	end
 
 endmodule
