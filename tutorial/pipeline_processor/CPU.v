@@ -256,15 +256,20 @@ module CPU(
 		// EX
 		constant = insnToID[ `CONSTAT_POS +: `CONSTAT_WIDTH ];
 		disp = `EXPAND_BR_DISPLACEMENT( constantToEX );
-		tmpPcOut = incrementedInsnAddrToEX + disp;
+		tmpPcOut = incrementedInsnAddrToEX - 4*`INSN_PC_INC + disp;
+		$display("rfRdDataSToEX", rfRdDataSToEX);
+		$display("rfRdDataTToEX", rfRdDataTToEX);
 		isEqual =  (rfRdDataSToEX == rfRdDataTToEX) ? `TRUE : `FALSE;
+		$display("isEqual", isEqual);
 		aluInA = rfRdDataSToEX;
 		aluInB = aLUSrcToEX ? constantToEX: rfRdDataTToEX;
 		rfWrNum = regDstToEX ? dcRDToEX : dcRTToEX;
 
 		// MEM
-		isEqual = rfRdDataSToEX == rfRdDataSToEX;
+		$display("branchToMem", branchToMEM);
+		$display("isEqualToMem", isEqualToMem);
 		pcWrEnable = branchToMEM & isEqualToMem;
+		$display("pcWrEnable", pcWrEnable);
 		pcIn = tmpPcOutToMem;
 		memWrite = memWriteToMEM;
 		dataAddr = aluOutToMem;

@@ -52,7 +52,7 @@ always_ff @( posedge clk or negedge rst ) begin
       outIsEqual <= `FALSE;
       outAluOut <= `FALSE;
       outRfRdDataT <= `FALSE;
-      outRfWrNum = `FALSE;
+      outRfWrNum <= `FALSE;
     end
 
     else begin
@@ -65,7 +65,7 @@ always_ff @( posedge clk or negedge rst ) begin
       outIsEqual <= inIsEqual;
       outAluOut <= inAluOut;
       outRfRdDataT <= inRfRdDataT;
-      outRfWrNum = inRfWrNum;
+      outRfWrNum <= inRfWrNum;
     end
 end
 
