@@ -21,7 +21,6 @@ module IFID(
       outInsn <= inInsn;
       outIncrementedInsn <= inIncrementedInsn;
     end
-    $display("outInsn:IFIF%h",outInsn);
   end
 
 endmodule

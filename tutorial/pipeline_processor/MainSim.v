@@ -2,8 +2,6 @@
 // 検証用モジュール
 //
 
-
-
 // 基本的な型を定義したファイルの読み込み
 `include "Types.v"
 
@@ -34,7 +32,6 @@ module H3_MainSim;
 	`DD_OutArray led;
 	`DD_GateArray gate;
 	`LampPath lamp;	// Lamp?
-	
 
 	// Main モジュール
 	Main main(

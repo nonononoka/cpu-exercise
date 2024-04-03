@@ -1,22 +1,22 @@
+//
+// before PC
+//
+
 `include "Types.v"
 
-module BranchUnit(
-	output `InsnAddrPath pcOut,
-	input `InsnAddrPath pcIn,
-	input `DataPath     regRS,
-	input `DataPath     regRT,
-	input `ConstantPath constant
+module prevPC(
+    input logic clk,
+    input logic rst,
+    input logic inWrEnable,
+    output logic outWrEnable
 );
-
-	logic brTaken;
-	`InsnAddrPath disp;
-
-	always_comb begin
-		brTaken =  (regRS == regRT) ? `TRUE : `FALSE;
-
-		disp = `EXPAND_BR_DISPLACEMENT( constant );
- 		pcOut =
- 			pcIn + `INSN_PC_INC + (brTaken ? disp : `INSN_ADDR_WIDTH'h0); // 相対addr
-	end
+ always_ff @( posedge clk or negedge rst ) begin
+    if ( !rst ) begin
+      outWrEnable <= `FALSE;
+    end
+    else begin
+      outWrEnable <= inWrEnable;
+    end
+  end
 
 endmodule

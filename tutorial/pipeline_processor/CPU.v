@@ -255,7 +255,7 @@ module CPU(
 
 		// EX
 		constant = insnToID[ `CONSTAT_POS +: `CONSTAT_WIDTH ];
-		disp = `EXPAND_BR_DISPLACEMENT( constant );
+		disp = `EXPAND_BR_DISPLACEMENT( constantToEX );
 		tmpPcOut = incrementedInsnAddrToEX + disp;
 		isEqual =  (rfRdDataSToEX == rfRdDataTToEX) ? `TRUE : `FALSE;
 		aluInA = rfRdDataSToEX;
@@ -273,7 +273,6 @@ module CPU(
 		// WB
 		regWriteToID = regWriteToWB;
 		rfWrData = memToRegToWB ? dataIn : aluOutToWB;
-		$display("insnToID",insnToID);
 	end
 
 endmodule

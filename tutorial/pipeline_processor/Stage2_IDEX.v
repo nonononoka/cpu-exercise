@@ -73,6 +73,7 @@ always_ff @( posedge clk or negedge rst ) begin
     end
 
     else begin
+      outIncrementedInsn <= inIncrementedInsn;
       outRegDst <= inRegDst;
       outAluSrc <= inAluSrc;
       outMemToReg <= inMemToReg;
@@ -87,7 +88,6 @@ always_ff @( posedge clk or negedge rst ) begin
       outDcRD <= inDcRD;
       outConstant <= inConstant;
     end
-    $display("IDEX%h",outAluSrc);
   end
 
 endmodule

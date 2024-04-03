@@ -22,7 +22,6 @@ module ALU(
         `ALU_CODE_NOR: 
 			aluOut = !(aluInA | aluInB); 
         endcase
-        $display ($stime,"alu",code, aluOut);
     end
 
 endmodule

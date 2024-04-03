@@ -67,7 +67,6 @@ always_ff @( posedge clk or negedge rst ) begin
       outRfRdDataT <= inRfRdDataT;
       outRfWrNum = inRfWrNum;
     end
-    $display("EXMEM%h",outAluOut);
 end
 
 endmodule

@@ -32,7 +32,6 @@ module RegisterFile(
 	// コンパイラはこれを順序回路だと解釈する．
 	// always_ff中の動作は全て同時並列
 	always_ff @( posedge clk ) begin
-		$display("reg",wrNum,wrData,regWrite);
 		strage[0] <= 0;
 		if( regWrite ) begin			// 書き込み制御
 			strage[ wrNum ] <= wrData;	// 順序回路では，ノンブロッキング代入で
