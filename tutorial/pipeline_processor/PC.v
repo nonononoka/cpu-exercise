@@ -15,7 +15,6 @@ module PC(
 	input `InsnAddrPath addrIn,		// 外部書き込みをする時のアドレス
 	input logic wrEnable			// 外部書き込み有効
 );
-
 	`InsnAddrPath pc;
 
 	always_ff @( posedge clk or negedge rst ) begin // rst 0のときリセット
@@ -29,7 +28,6 @@ module PC(
 		else begin
 			pc <= pc + `INSN_PC_INC;	// PC 更新
 		end
-
 	end
 
 	// 出力

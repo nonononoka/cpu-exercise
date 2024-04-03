@@ -27,6 +27,10 @@ SOURCES = \
 	RegisterFile.v \
 	PC.v \
 	Branch.v \
+	Stage1_IFID.v \
+	Stage2_IDEX.v \
+	Stage3_EXMEM.v \
+	Stage4_MEMWB.v \
 
 DEPS = \
 	$(SOURCES) \

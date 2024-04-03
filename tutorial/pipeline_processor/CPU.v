@@ -44,6 +44,65 @@ module CPU(
 	`DataPath aluInA;			// ALU 入力A
 	`DataPath aluInB;			// ALU 入力B
 
+	// Pipeline
+
+	// IFID
+	`InsnAddrPath incrementedInsnAddr;
+	`InsnAddrPath incrementedInsnAddrToID;
+	`InsnPath insnToID;
+
+	// IDEX
+	`InsnAddrPath incrementedInsnAddrToEX;
+
+	`InsnAddrPath disp;
+	`InsnAddrPath dispToEX;
+	`ConstantPath constant;
+	`ConstantPath constantToEX;
+
+	`ALUCodePath aluCodeToEX;		// ALU の制御コード
+	logic regDstToEX;			// 書き込みレジスタのdestination,trueならrd
+	logic aLUSrcToEX; // aluの第二オペランドがレジスタの第二出力か、命令の下位16bitか
+	logic memToRegToEX;			// レジスタの書き込みデータに渡される値がデータメモリかALUか
+	logic regWriteToEX;	// レジスタに書きこむかどうか
+	logic memReadToEX;			// ロード命令かどうか
+	logic memWriteToEX;		// ストア命令かどうか
+	logic branchToEX;		// ブランチ命令かどうか
+
+	`DataPath rfRdDataSToEX;
+	`DataPath rfRdDataTToEX;
+
+	`RegNumPath dcRTToEX;			// RS フィールド
+	`RegNumPath dcRDToEX;			// RT フィールド
+
+	// EXMEM
+	`InsnAddrPath tmpPcOut;
+	`InsnAddrPath tmpPcOutToMem;
+
+	logic memToRegToMEM;			// レジスタの書き込みデータに渡される値がデータメモリかALUか
+	logic regWriteToMEM;	// レジスタに書きこむかどうか
+	logic memReadToMEM;			// ロード命令かどうか
+	logic memWriteToMEM;		// ストア命令かどうか
+	logic branchToMEM;		// ブランチ命令かどうか
+
+	logic isEqual;
+	logic isEqualToMem;
+
+	`DataPath aluOutToMem;
+
+	`DataPath rfRdDataTToMem;
+	`RegNumPath rfWrNumToMem;		// 書き込み番号
+
+	// MEMWB
+	logic memToRegToWB;			// レジスタの書き込みデータに渡される値がデータメモリかALUか
+	logic regWriteToWB;
+	`DataPath aluOutToWB;
+	`RegNumPath rfWrNumToWB;		// 書き込み番号
+	`DataPath     dataInToWB;	
+	logic pcSrc;
+
+	// MEMWB
+	logic regWriteToID;
+
 	PC pc (
 		.clk( clk ), // in
 		.rst( rst ), // in
@@ -68,14 +127,14 @@ module CPU(
 		.memRead( dcMemRead ), // out
 		.memWrite( dcMemWrite ),	// out
 		.branch( dcBranch ),	// out
-		.insn( insn ) // in
+		.insn( insnToID ) // in
 	);
 
 	ALU alu (
 		.aluOut( aluOut ), // out
 		.aluInA( aluInA ), // in
 		.aluInB( aluInB ), // in
-		.code( dcALUCode ) // in
+		.code( aluCodeToEX ) // in
 	);
 
 	RegisterFile regFile(
@@ -89,38 +148,139 @@ module CPU(
 
 		.wrData( rfWrData ), // in
 		.wrNum( rfWrNum ), // in
-		.regWrite( dcRegWrite ) // in
+		.regWrite( regWriteToID ) // in
 	);
 
-	BranchUnit branch(
-		.pcOut(pcIn),
-		.pcIn(pcOut),
-		.regRS(rfRdDataS),
-		.regRT(rfRdDataT),
-		.constant(insn[ `CONSTAT_POS +: `CONSTAT_WIDTH ])
+	// BranchUnit branch(
+	// 	.pcOut(pcIn),
+	// 	.pcIn(pcOut),
+	// 	.regRS(rfRdDataS),
+	// 	.regRT(rfRdDataT),
+	// 	.constant(insn[ `CONSTAT_POS +: `CONSTAT_WIDTH ])
+	// );
+
+	IFID ifid(
+		.clk(clk),
+		.rst(rst),
+		.inInsn(insn),
+		.inIncrementedInsn(incrementedInsnAddr),
+		.outInsn(insnToID),
+		.outIncrementedInsn(incrementedInsnAddrToID)
+	);
+
+	IDEX idex(
+		.clk(clk),
+		.rst(rst),
+
+		.inIncrementedInsn(incrementedInsnAddrToID),
+		.outIncrementedInsn(incrementedInsnAddrToEX),
+
+		.inRegDst(dcRegDst),
+		.inAluSrc(dcALUSrc),
+		.inMemToReg(dcMemToReg),
+		.inRegWrite(dcRegWrite),
+		.inMemRead(dcMemRead),
+		.inMemWrite(dcMemWrite),
+		.inBranch(dcBranch),
+		.inAluCode(dcALUCode),
+
+		.outRegDst(regDstToEX),
+		.outAluSrc(aLUSrcToEX),
+		.outMemToReg(memToRegToEX),
+		.outRegWrite(regWriteToEX),
+		.outMemRead(memReadToEX),
+		.outMemWrite(memWriteToEX),
+		.outBranch(branchToEX),
+		.outAluCode(aluCodeToEX),
+
+		.inRdDataS(rfRdDataS),
+		.inRdDataT(rfRdDataT),
+		.outRdDataS(rfRdDataSToEX),
+		.outRdDataT(rfRdDataTToEX),
+
+		.inDcRD(dcRD),
+		.inDcRT(dcRT),
+		.outDcRT(dcRTToEX),
+		.outDcRD(dcRDToEX),
+
+		.inDisp(disp),
+		.outDisp(dispToEX),
+
+		.inConstant(constant),
+		.outConstant(constantToEX)
+	);
+
+	EXMEM exmem(
+		.clk(clk),
+		.rst(rst),
+		
+		.inMemToReg(memToRegToEX),
+		.inRegWrite(regWriteToEX),
+		.inMemRead(memReadToEX),
+		.inMemWrite(memWriteToEX),
+		.inBranch(branchToEX),
+
+		.outMemToReg(memToRegToMEM),
+		.outRegWrite(regWriteToMEM),
+		.outMemRead(memReadToMEM),
+		.outMemWrite(memWriteToMEM),
+		.outBranch(branchToMEM),
+
+		.inPcOut(tmpPcOut),
+		.outPcOut(tmpPcOutToMem),
+
+		.inIsEqual(isEqual),
+		.inAluOut(aluOut),
+
+		.outIsEqual(isEqualToMem),
+		.outAluOut(aluOutToMem),
+
+		.inRT(rfRdDataTToEX),
+		.outRT(rfRdDataTToMem),
+
+		.inRfWrNum(rfWrNum),
+		.outRfWrNum(rfWrNumToMem)
+	);
+
+	MEMWB memwb(
+		.clk(clk),
+		.rst(rst),
+		.inMemToReg(memToRegToMEM),
+		.inRegWrite(regWriteToMEM),
+		.outMemToReg(memToRegToWB),
+		.ourRegWrite(regWriteToWB),
+		.inAluOut(aluOutToMem),
+		.outAluOut(aluOutToWB),
+		.inRfWrNum(rfWrNumToMem),
+		.outRfWrNum(rfWrNumToWB),
+		.inMData(dataIn),
+		.outMData(dataInToWB)
 	);
 
 	always_comb begin
-		$display("insn:%h",insn);
-		// regDst
-		rfWrNum = dcRegDst ? dcRD : dcRT;
-		// MemToReg
-		rfWrData = dcMemToReg ? dataIn : aluOut;
+		// ID
+		incrementedInsnAddr = pcOut + `INSN_PC_INC;
 
-		// aluSrc
-		aluInA = rfRdDataS;
-		aluInB = dcALUSrc ? insn[ `CONSTAT_POS +: `CONSTAT_WIDTH ] : rfRdDataT ;
+		// EX
+		constant = insnToID[ `CONSTAT_POS +: `CONSTAT_WIDTH ];
+		disp = `EXPAND_BR_DISPLACEMENT( constant );
+		tmpPcOut = incrementedInsnAddrToEX + disp;
+		isEqual =  (rfRdDataSToEX == rfRdDataTToEX) ? `TRUE : `FALSE;
+		aluInA = rfRdDataSToEX;
+		aluInB = aLUSrcToEX ? constantToEX: rfRdDataSToEX;
+		rfWrNum = regDstToEX ? dcRDToEX : dcRTToEX;
 
-		// MemWrite
-		memWrite = dcMemWrite;
+		// MEM
+		isEqual = rfRdDataSToEX == rfRdDataSToEX;
+		pcSrc = branchToMEM & isEqualToMem;
+		memWrite = memWriteToMEM;
+		dataAddr = aluOutToMem;
+		dataOut = rfRdDataTToMem;
 
-		// pcWrEnable
-		pcWrEnable = dcBranch & (rfRdDataS == rfRdDataT);
+		// WB
+		regWriteToID = regWriteToWB;
+		rfWrData = memToRegToWB ? dataIn : aluOutToWB;
 
-		// outputの記述
-		insnAddr     = pcOut;
-		dataAddr = aluOut[ `DATA_ADDR_WIDTH - 1 : 0 ];
-		dataOut = rfRdDataT;
 	end
 
 endmodule

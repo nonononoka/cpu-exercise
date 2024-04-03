@@ -7,19 +7,19 @@
 module IFID(
     input logic clk,
     input logic rst,
-    input `InsnPath insnFromIMem,
-    input `InsnPath incrementedInsnFromIMem,
-    output `InsnPath insnToID_EX,
-    output `InsnPath incrementedInsnToID_EX
+    input `InsnPath inInsn,
+    input `InsnPath inIncrementedInsn,
+    output `InsnPath outInsn,
+    output `InsnPath outIncrementedInsn
 );
  always_ff @( posedge clk or negedge rst ) begin
     if ( !rst ) begin
-      insnToID_EX <= `FALSE;
-      incrementedInsnToID_EX <= `FALSE;
+      outInsn <= `FALSE;
+      outIncrementedInsn <= `FALSE;
     end
     else begin
-      insnToID_EX <= insnFromIMem;
-      incrementedInsnToIDEX <= incrementedInsnFromIMem;
+      outInsn <= inInsn;
+      outIncrementedInsn <= inIncrementedInsn;
     end
   end
 
