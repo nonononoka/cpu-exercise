@@ -33,7 +33,6 @@ module IMem(
 
 	always_comb begin
 		insn = mem[ addrLatch[ `INSN_MEM_OFFSET +: `INSN_MEM_WIDTH ] ];
-		// $display($stime, "insnaddr", addr);
 	end
 
 	// 命令データの読み込み

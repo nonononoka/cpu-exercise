@@ -2,8 +2,6 @@
 // 検証用モジュール
 //
 
-
-
 // 基本的な型を定義したファイルの読み込み
 `include "Types.v"
 
@@ -21,11 +19,10 @@ module H3_MainSim;
 	integer i;
 
 	integer cycle;		// サイクル
-	integer cycleX4;	// 4倍速サイクル
 
 	logic countCycle;
 
-	logic clkX4;		// 4倍速クロック
+	logic clk;		// 4倍速クロック
 	logic rst;
 
 	logic sigCH;
@@ -35,7 +32,6 @@ module H3_MainSim;
 	`DD_OutArray led;
 	`DD_GateArray gate;
 	`LampPath lamp;	// Lamp?
-	
 
 	// Main モジュール
 	Main main(
@@ -46,9 +42,9 @@ module H3_MainSim;
 		led,
 		gate,
 		lamp,	// Lamp?
-		clkX4,	// 4倍速クロック
+		clk,	
 		rst, 	// リセット（0でリセット）
-		clkX4
+		clk
 	);
 
 	// 検証動作を記述する
@@ -89,53 +85,41 @@ module H3_MainSim;
 	// クロック
 	initial begin 
 		countCycle = 0;
-		clkX4   = 1'b1;
-		cycleX4 = 0;
+		clk   = 1'b1;
 		cycle = 0;
 		
-	    forever #(CYCLE_TIME / 2 / 4) begin
-	
-			// 4倍速
-	    	clkX4 = !clkX4 ;
+	    forever #(CYCLE_TIME / 2) begin
+	    	clk = !clk;
 	    	
 	    	if( countCycle ) begin
-
-				cycleX4 = cycleX4 + 1;
-				// 等速
-				if( cycleX4 % 8 == 0 ) begin
-			    	cycle = cycle + 1 ;
-			    end
-
+				cycle = cycle + 1;
 			end
 			
-		    
 		    // カウント開始
-		    if( rst && clkX4 ) begin
+		    if( rst && clk ) begin
 		    	countCycle = 1;
 		    end
 	    end
 	end
 
-	always @( posedge clkX4 or negedge clkX4 ) begin 
+	always @( posedge clk or negedge clk ) begin 
 		
 		$write(
 			"%s\n",
-			( clkX4 == 0 ) ?
+			( clk == 0 ) ?
 		  		"=====================================================" :
 		  		"-----------------------------------------------------");
 		
 		$write(
 			"cycle -> %0d\n", 
-		  	cycleX4
+		  	cycle
 		);
 		
 		$write(
 			"  %s\n",
-		  	( clkX4 == 1 ) ? "posedge clk" : "negedge clk"
+		  	( clk == 1 ) ? "posedge clk" : "negedge clk"
 		);
 		
 	end
 
 endmodule
-
-

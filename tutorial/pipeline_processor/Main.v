@@ -13,13 +13,6 @@ module Main(
 	input logic rst, 		// リセット（0でリセット）
 	input logic clkled   // LED用クロック
 );
-	// 命令メモリとデータメモリは，FPGA の仕様により
-	// アドレスを入力した1サイクル後にデータが読み出される．
-	// このままではシングルサイクルマシンが作れないので，メモリには
-	// 4倍速のクロックを入れてある．
-
-	// Clock/Reset
-	logic clkX4;
 	logic clk;
 	
 	// IMem
@@ -28,28 +21,21 @@ module Main(
 	
 	// Data Memory
 	logic         dmemWrEnable;		// 書き込み有効
-	
+
 	// IOCtrl
-	logic         dataWE_Req;
+	// logic         dataWE_Req;
 	
 	// データ
 	`DataPath     dataToCPU;		// 出力
 	`DataAddrPath dataAddr;			// アドレス
 	`DataPath     dataFromCPU;		// 入力
 	`DataPath     dataFromDMem;		// データメモリ読み出し
-	logic         dataWE_FromCPU;	
-
-	// Clock divider
-	ClockDivider clockDivider(
-		.clk( clk ),
-		.rst( rst ),
-		.clkX4( clkX4 )
-	);
+	logic         dataWE_FromCPU;
 	
 	// IO
 	IOCtrl ioCtrl(
-		.clk( clkX4 ), // in
-		.clkLed( clkled ), // in
+		.clk( clk ), // in
+		.clkLed( clk ), // in
 		.rst( rst ), // in
 
 		.dmemWrEnable( dmemWrEnable ), // out
@@ -62,7 +48,7 @@ module Main(
 		.addrFromCPU( dataAddr ), // in
 		.dataFromCPU( dataFromCPU ), // in
 		.dataFromDMem( dataFromDMem ), // in
-		.weFromCPU( dataWE_Req ), // in
+		.weFromCPU( dmemWrEnable ), // in
 
 		.sigCH( sigCH ), // in
 		.sigCE( sigCE ), // in
@@ -77,7 +63,7 @@ module Main(
 		.insnAddr( imemAddr ),		// out: 命令メモリへのアドレス出力
 		.dataAddr( dataAddr ),		// out: データメモリへのアドレス出力
 		.dataOut( dataFromCPU ),	// out: データメモリへの入力
-		.memWrite( dataWE_FromCPU ),	// out: データメモリ書き込み有効
+		.memWrite(  dataWE_FromCPU  ),	// out: データメモリ書き込み有効
 
 		.insn( imemDataToCPU ),	// in: 命令メモリからの出力
 		.dataIn( dataToCPU )	// in: データメモリからの出力
@@ -85,7 +71,7 @@ module Main(
 
 	// IMem
 	IMem imem(
-		.clk( clkX4 ), 			// in: メモリは4倍速
+		.clk( clk ), 			// in: メモリは4倍速
 		.rst( rst ), // in
 
 		.insn( imemDataToCPU ), // out
@@ -95,7 +81,7 @@ module Main(
 
 	// Data memory
 	DMem dmem(
-		.clk( clkX4 ),			// メモリは4倍速
+		.clk( clk ),			// メモリは4倍速
 		.rst( rst ),			// リセット
 
 		.dataOut( dataFromDMem ), // out
@@ -108,11 +94,7 @@ module Main(
 	always_comb begin
 
 		// クロック
-		clkX4  = clkBase;
-		
-		// データメモリへの書き込みはクロックサイクル後半のみ有効
-		dataWE_Req = !clk && dataWE_FromCPU;
-
+		clk  = clkBase;
  	end
 	
 
