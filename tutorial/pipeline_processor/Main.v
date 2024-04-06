@@ -23,7 +23,7 @@ module Main(
 	logic         dmemWrEnable;		// 書き込み有効
 
 	// IOCtrl
-	// logic         dataWE_Req;
+	logic         dataWE_Req;
 	
 	// データ
 	`DataPath     dataToCPU;		// 出力
@@ -48,7 +48,7 @@ module Main(
 		.addrFromCPU( dataAddr ), // in
 		.dataFromCPU( dataFromCPU ), // in
 		.dataFromDMem( dataFromDMem ), // in
-		.weFromCPU( dmemWrEnable ), // in
+		.weFromCPU( dataWE_Req ), // in
 
 		.sigCH( sigCH ), // in
 		.sigCE( sigCE ), // in
@@ -63,7 +63,7 @@ module Main(
 		.insnAddr( imemAddr ),		// out: 命令メモリへのアドレス出力
 		.dataAddr( dataAddr ),		// out: データメモリへのアドレス出力
 		.dataOut( dataFromCPU ),	// out: データメモリへの入力
-		.memWrite(  dataWE_FromCPU  ),	// out: データメモリ書き込み有効
+		.memWrite( dataWE_FromCPU  ),	// out: データメモリ書き込み有効
 
 		.insn( imemDataToCPU ),	// in: 命令メモリからの出力
 		.dataIn( dataToCPU )	// in: データメモリからの出力
@@ -95,6 +95,7 @@ module Main(
 
 		// クロック
 		clk  = clkBase;
+		dataWE_Req = dataWE_FromCPU;
  	end
 	
 
