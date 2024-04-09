@@ -250,29 +250,38 @@ module CPU(
 
 	always_comb begin
 		// ID
-		insnAddr     = pcOut;
-		incrementedInsnAddr = pcOut + `INSN_PC_INC;
+		insnAddr = pcOut;
+		incrementedInsnAddr = pcOut;
 
 		// EX
 		constant = insnToID[ `CONSTAT_POS +: `CONSTAT_WIDTH ];
 		disp = `EXPAND_BR_DISPLACEMENT( constantToEX );
+		$display("incrementedInsnAddrToEX", incrementedInsnAddrToEX);
 		tmpPcOut = incrementedInsnAddrToEX + disp;
+		$display("tmppcout", tmpPcOut);
+		$display("rfRdDataSToEX", rfRdDataSToEX);
+		$display("rfRdDataTToEX", rfRdDataTToEX);
 		isEqual =  (rfRdDataSToEX == rfRdDataTToEX) ? `TRUE : `FALSE;
+		$display("isEqual", isEqual);
 		aluInA = rfRdDataSToEX;
 		aluInB = aLUSrcToEX ? constantToEX: rfRdDataTToEX;
 		rfWrNum = regDstToEX ? dcRDToEX : dcRTToEX;
 
 		// MEM
-		isEqual = rfRdDataSToEX == rfRdDataSToEX;
+		$display("branchToMem", branchToMEM);
+		$display("isEqualToMem", isEqualToMem);
 		pcWrEnable = branchToMEM & isEqualToMem;
 		pcIn = tmpPcOutToMem;
 		memWrite = memWriteToMEM;
 		dataAddr = aluOutToMem;
 		dataOut = rfRdDataTToMem;
+		$display("pcWrEnable", pcWrEnable,"pcIn:",pcIn);
+		$display("dataout", dataOut, "dataAddr:%h",dataAddr,"memWrite",memWrite);
 
 		// WB
 		regWriteToID = regWriteToWB;
 		rfWrData = memToRegToWB ? dataIn : aluOutToWB;
+		$display("dataIn:%h", dataIn, rfWrData);
 	end
 
 endmodule

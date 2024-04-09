@@ -15,8 +15,8 @@ module PC(
 );
 	`InsnAddrPath pc;
 	logic pcWrEnable;
-
 	always_ff @( posedge clk or negedge rst ) begin // rst 0のときリセット
+		$display("wrEnable:%b, adderIn:", pcWrEnable, addrIn);
 		if( !rst ) begin
 			pc <= `INSN_RESET_VECTOR;	// リセット
 		end

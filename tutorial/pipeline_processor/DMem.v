@@ -28,6 +28,7 @@ module DMem(
 	logic        weLatch;
 
 	always_ff @( posedge clk or negedge rst) begin
+		// $display("dmem",wrEnable, addr, dataIn);
 		if( !rst ) begin
 			addrLatch <= `DATA_MEM_ADDR_WIDTH'h0;
 			dataLatch <= `DATA_WIDTH'h0;
@@ -38,13 +39,12 @@ module DMem(
 			dataLatch <= dataIn;
 			weLatch   <= wrEnable;
 		end
-		if( weLatch )
-			mem[ addrLatch ] <= dataLatch;
+		
+		if( wrEnable )
+			mem[ addr[ `DATA_MEM_OFFSET +: `DATA_MEM_ADDR_WIDTH ] ] <= dataIn;
 	end
 	
-	always_comb begin
-		dataOut = mem[ addrLatch ];
-	end
+	assign dataOut = mem[ addrLatch ];
 
 	// データの読み込み
 	integer i;
@@ -67,7 +67,7 @@ module DMem(
 			.q      ( dataOut  )
 			//.outclock( 1'b1 )
 		);
-		
+
 	defparam
 		body.intended_device_family = "APEX20KE",
 		body.lpm_address_control    = "REGISTERED",
@@ -81,4 +81,3 @@ module DMem(
 `endif
 
 endmodule
-
