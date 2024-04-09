@@ -101,14 +101,6 @@ module Decoder (
             `FUNCT_CODE_SLT: aluCode = `ALU_CODE_SLT;
             endcase
         end
-        $display("decoded insn:%h",insn);
-        $display("decode", regDst,
-                aluSrc ,
-                memToReg,
-                regWrite,
-                memRead,
-                memWrite,
-                branch);
     end
 
 endmodule
