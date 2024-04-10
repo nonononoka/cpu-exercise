@@ -35,7 +35,7 @@ module Main(
 	// IO
 	IOCtrl ioCtrl(
 		.clk( clk ), // in
-		.clkLed( clk ), // in
+		.clkLed( clkled ), // in
 		.rst( rst ), // in
 
 		.dmemWrEnable( dmemWrEnable ), // out
