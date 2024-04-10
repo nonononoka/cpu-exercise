@@ -71,7 +71,7 @@ module DMem(
 	defparam
 		body.intended_device_family = "APEX20KE",
 		body.lpm_address_control    = "REGISTERED",
-		body.lpm_file    = "../DMem.mif",
+		body.lpm_file    = "DMem.mif",
 		body.lpm_indata  = "REGISTERED",
 		body.lpm_outdata = "UNREGISTERED",
 		body.lpm_type    = "LPM_RAM_DQ",

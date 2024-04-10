@@ -22,6 +22,8 @@ module ALU(
 			aluOut = aluInA < aluInB ? `TRUE : `FALSE;
         `ALU_CODE_NOR: 
 			aluOut = !(aluInA | aluInB); 
+        default:
+            aluOut = aluInA + aluInB;
         endcase
         // $display ($stime,"alu",code, aluOut);
     end

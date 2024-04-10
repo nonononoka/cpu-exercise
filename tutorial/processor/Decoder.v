@@ -83,6 +83,15 @@ module Decoder (
                 memWrite = `FALSE;
                 branch =  `FALSE;
             end
+            default: begin
+                regDst = `FALSE;
+                aluSrc = `TRUE;
+                memToReg =  `FALSE;
+                regWrite = `TRUE;
+                memRead = `FALSE;
+                memWrite = `FALSE;
+                branch =  `FALSE;
+            end
         endcase
 
         // create ALUCOde
@@ -99,6 +108,7 @@ module Decoder (
             `FUNCT_CODE_AND: aluCode = `ALU_CODE_AND;
             `FUNCT_CODE_OR: aluCode = `ALU_CODE_OR;
             `FUNCT_CODE_SLT: aluCode = `ALU_CODE_SLT;
+            default: aluCode = `ALU_CODE_ADD;
             endcase
         end
     end

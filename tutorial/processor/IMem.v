@@ -63,7 +63,7 @@ module IMem(
 		body.lpm_indata  = "REGISTERED",
 		body.lpm_address_control = "REGISTERED",
 		body.lpm_outdata = "UNREGISTERED",
-		body.lpm_file    = "../IMem.mif",
+		body.lpm_file    = "IMem.mif",
 		body.lpm_type    = "LPM_ROM";
 
 
